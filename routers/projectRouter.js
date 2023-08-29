@@ -11,6 +11,7 @@ class projectRouter {
     router.get("/:projectId", this.controller.getOneProject.bind(this.controller));
     router.post("/", this.controller.postOneProject.bind(this.controller));
     router.put("/:projectId", this.controller.putOneProject.bind(this.controller));
+    router.delete("/:projectId", this.controller.deleteOneProject.bind(this.controller));
     return router;
   }
 }

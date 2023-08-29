@@ -84,11 +84,20 @@ class UserController {
       }
   
       // Update user attributes
-      existingUser.user_name = user_name;
-      existingUser.user_role = user_role;
-      existingUser.image_link = image_link;
-      existingUser.additional_info = additional_info;
-      existingUser.updated_at = Sequelize.literal('CURRENT_TIMESTAMP'),
+      if (user_name) {
+        existingUser.user_name = user_name;
+      }
+      if (user_role) {
+        existingUser.user_role = user_role;
+      }
+      if (image_link) {
+        existingUser.image_link = image_link;
+      }
+      if (additional_info) {
+        existingUser.additional_info = additional_info;
+      }
+
+      existingUser.updated_at = Sequelize.literal('CURRENT_TIMESTAMP');
   
       // Save the changes to the database
       await existingUser.save();
@@ -100,6 +109,28 @@ class UserController {
     }
   }
   
+  // Delete a specific user
+  async deleteOneUser(req, res) {
+    try {
+      const { userId } = req.params;
+
+      // Find the existing user by ID
+      const existingUser = await this.model.findByPk(userId);
+
+      if (!existingUser) {
+        return res.status(404).json({ error: true, msg: 'User not found.' });
+      }
+
+      // Delete the user from the database
+      await existingUser.destroy();
+
+      // Respond with a success message
+      return res.json({ success: true, msg: 'User deleted successfully.' });
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
 }
 
 module.exports = UserController;

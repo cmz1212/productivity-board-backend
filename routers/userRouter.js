@@ -11,6 +11,7 @@ class userRouter {
     router.get("/:userId", this.controller.getOneUser.bind(this.controller));
     router.post("/", this.controller.postOneUser.bind(this.controller));
     router.put("/:userId", this.controller.putOneUser.bind(this.controller));
+    router.delete("/:userId", this.controller.deleteOneUser.bind(this.controller));
     return router;
   }
 }

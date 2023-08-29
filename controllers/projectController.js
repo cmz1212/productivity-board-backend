@@ -50,15 +50,6 @@ class ProjectController {
         project_comments,
       } = req.body;
 
-      // Example (uncomment the following and copy for testing, comment back afterwards):
-      // {
-      //   "project_description":"Kanban testing 1",
-      //   "wip_limit": 69,
-      //   "cycle_time_limit": 1000,
-      //   "project_comments": "All POST should follow this format"
-
-      // }
-
       const newProject = await this.model.create({
         project_description,
         wip_limit,
@@ -109,9 +100,10 @@ class ProjectController {
         existingProject.project_comments = project_comments;
       }
 
-      (existingProject.updated_at = Sequelize.literal("CURRENT_TIMESTAMP")),
-        // Save the changes to the database
-        await existingProject.save();
+      existingProject.updated_at = Sequelize.literal("CURRENT_TIMESTAMP");
+
+      // Save the changes to the database
+      await existingProject.save();
 
       // Respond with the updated project
       return res.json(existingProject);
@@ -119,6 +111,29 @@ class ProjectController {
       return res.status(400).json({ error: true, msg: err.message });
     }
   }
+
+  // Delete a specific project
+  async deleteOneProject(req, res) {
+    try {
+      const { projectId } = req.params;
+
+      // Find the existing project by ID
+      const existingProject = await this.model.findByPk(projectId);
+
+      if (!existingProject) {
+        return res.status(404).json({ error: true, msg: 'Project not found.' });
+      }
+
+      // Delete the project from the database
+      await existingProject.destroy();
+
+      // Respond with a success message
+      return res.json({ success: true, msg: 'Project deleted successfully.' });
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
 }
 
 module.exports = ProjectController;

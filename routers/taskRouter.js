@@ -11,6 +11,7 @@ class taskRouter {
     router.get("/:taskId", this.controller.getOneTask.bind(this.controller));
     router.post("/", this.controller.postOneTask.bind(this.controller));
     router.put("/:taskId", this.controller.putOneTask.bind(this.controller));
+    router.delete("/:taskId", this.controller.deleteOneTask.bind(this.controller));
     return router;
   }
 }
