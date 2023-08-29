@@ -1,3 +1,5 @@
+const Sequelize = require('sequelize');
+
 class UserController {
   constructor(model, taskModel) {
     this.model = model;
