@@ -1,3 +1,5 @@
+const Sequelize = require('sequelize');
+
 class TaskController {
   constructor(model, projectModel, userModel) {
     this.model = model;
