@@ -30,7 +30,7 @@ const userRouter = new UserRouter(userController).routes()
 
 
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 const app = express();
 
 // Enable CORS access to this server
