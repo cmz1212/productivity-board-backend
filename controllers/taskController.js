@@ -55,11 +55,11 @@ class TaskController {
   async postOneTask(req, res) {
     try {
       // Get the input data from the request body
-      const { task_description, task_id, status, start_date, end_date, target_end_date, cycle_time, target_cycle_time, priority, task_comments } = req.body;
+      const { task_description, project_id, status, start_date, end_date, target_end_date, cycle_time, target_cycle_time, priority, task_comments } = req.body;
 
       const newTask = await this.model.create({
         task_description,
-        task_id,
+        project_id,
         status,
         start_date,
         end_date,
@@ -85,7 +85,7 @@ class TaskController {
       const { taskId } = req.params;
   
       // Get the updated data from the request body
-      const { task_description, task_id, status, start_date, end_date, target_end_date, cycle_time, target_cycle_time, priority, task_comments } = req.body;
+      const { task_description, project_id, status, start_date, end_date, target_end_date, cycle_time, target_cycle_time, priority, task_comments } = req.body;
   
       // Find the existing task by ID
       const existingTask = await this.model.findByPk(taskId);
@@ -99,8 +99,8 @@ class TaskController {
       if (task_description) {
         existingTask.task_description = task_description;
       }
-      if (task_id) {
-        existingTask.task_id = task_id;
+      if (project_id) {
+        existingTask.project_id = project_id;
       }
       if (status) {
         existingTask.status = status;
