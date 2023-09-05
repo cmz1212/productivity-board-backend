@@ -48,6 +48,7 @@ class ProjectController {
         wip_limit,
         cycle_time_limit,
         project_comments,
+        auth_id,
       } = req.body;
 
       const newProject = await this.model.create({
@@ -55,6 +56,7 @@ class ProjectController {
         wip_limit,
         cycle_time_limit,
         project_comments,
+        auth_id,
         created_at: Sequelize.literal("CURRENT_TIMESTAMP"),
         updated_at: Sequelize.literal("CURRENT_TIMESTAMP"),
       });

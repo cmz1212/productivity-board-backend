@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    auth_id: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     wip_limit: DataTypes.BIGINT,
     cycle_time_limit: DataTypes.BIGINT,
     project_comments: DataTypes.STRING,
