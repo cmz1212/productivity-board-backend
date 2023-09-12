@@ -1,12 +1,13 @@
-const express = require("express");
-const router = express.Router();
-
 class projectRouter {
-  constructor(controller) {
+  constructor(express,controller,checkJwt,checkAdminScopes,checkContentManagerScopes) {
+    this.express = express;
     this.controller = controller;
+    this.checkJwt = checkJwt;
+    this.checkAdminScopes = checkAdminScopes;
+    this.checkContentManagerScopes = checkContentManagerScopes;
   }
   routes() {
-    // we will insert routes into here later on
+    const router = this.express.Router();
     router.get("/", this.controller.getAll.bind(this.controller));
     router.get("/:projectId", this.controller.getOneProject.bind(this.controller));
     router.post("/", this.controller.postOneProject.bind(this.controller));
@@ -17,3 +18,4 @@ class projectRouter {
 }
 
 module.exports = projectRouter;
+

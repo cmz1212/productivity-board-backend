@@ -1,12 +1,13 @@
-const express = require("express");
-const router = express.Router();
-
 class userRouter {
-  constructor(controller) {
+  constructor(express,controller,checkJwt,checkAdminScopes,checkContentManagerScopes) {
+    this.express = express;
     this.controller = controller;
+    this.checkJwt = checkJwt;
+    this.checkAdminScopes = checkAdminScopes;
+    this.checkContentManagerScopes = checkContentManagerScopes;
   }
   routes() {
-    // we will insert routes into here later on
+    const router = this.express.Router();
     router.get("/", this.controller.getAll.bind(this.controller));
     router.get("/:userId", this.controller.getOneUser.bind(this.controller));
     router.post("/", this.controller.postOneUser.bind(this.controller));

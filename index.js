@@ -1,37 +1,46 @@
-const cors = require('cors')
-const express = require('express')
-require('dotenv').config()
+const cors = require('cors');
+const express = require('express');
+const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
 
-// importing Routers
-const TaskRouter = require('./routers/taskRouter')
-const ProjectRouter = require('./routers/projectRouter')
-const UserRouter = require('./routers/userRouter')
-
-// importing Controllers
-const TaskController = require('./controllers/taskController')
-const ProjectController = require('./controllers/projectController')
-const UserController = require('./controllers/userController')
-
-
-
-// importing DB
-const db = require('./db/models/index')
-const {task, project, user} = db
-
-// initializing Controllers -> note the lowercase for the first word
-const taskController = new TaskController(task, project, user)
-const projectController = new ProjectController(project, task)
-const userController = new UserController(user, task)
-
-// inittializing Routers
-const taskRouter = new TaskRouter(taskController).routes()
-const projectRouter = new ProjectRouter(projectController).routes()
-const userRouter = new UserRouter(userController).routes()
-
-
+require('dotenv').config();
 
 const PORT = process.env.PORT;
 const app = express();
+
+const checkJwt = auth({
+  audience: process.env.API_AUDIENCE,
+  issuerBaseURL: process.env.API_ISSUERBASEURL,
+  tokenSigningAlg: process.env.API_TOKEN_ALGORITHM
+});
+
+const checkAdminScopes = requiredScopes("write:project");
+const checkContentManagerScopes = requiredScopes("write:project");
+
+// importing Routers
+const TaskRouter = require('./routers/taskRouter');
+const ProjectRouter = require('./routers/projectRouter');
+const UserRouter = require('./routers/userRouter');
+
+// importing Controllers
+const TaskController = require('./controllers/taskController');
+const ProjectController = require('./controllers/projectController');
+const UserController = require('./controllers/userController');
+
+
+// importing DB
+const db = require('./db/models/index');
+const {task, project, user} = db;
+
+// initializing Controllers -> note the lowercase for the first word
+const taskController = new TaskController(task, project, user);
+const projectController = new ProjectController(project, task);
+const userController = new UserController(user, task);
+
+// initializing Routers
+const taskRouter = new TaskRouter(express, taskController, checkJwt, checkAdminScopes, checkContentManagerScopes).routes();
+const projectRouter = new ProjectRouter(express, projectController, checkJwt, checkAdminScopes, checkContentManagerScopes).routes();
+const userRouter = new UserRouter(express, userController, checkJwt, checkAdminScopes, checkContentManagerScopes).routes();
+
 
 // Enable CORS access to this server
 app.use(cors());
@@ -40,9 +49,9 @@ app.use(cors());
 app.use(express.json());
 
 // USING the routers
-app.use('/task', taskRouter)
-app.use('/project', projectRouter)
-app.use('/user', userRouter)
+app.use('/task', taskRouter);
+app.use('/project', projectRouter);
+app.use('/user', userRouter);
 
 app.listen(PORT, () => {
   console.log(`Express app listening on port ${PORT}!`);
