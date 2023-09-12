@@ -1,6 +1,6 @@
 const cors = require('cors');
 const express = require('express');
-const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
+const { auth } = require('express-oauth2-jwt-bearer');
 
 require('dotenv').config();
 
@@ -12,9 +12,6 @@ const checkJwt = auth({
   issuerBaseURL: process.env.API_ISSUERBASEURL,
   tokenSigningAlg: process.env.API_TOKEN_ALGORITHM
 });
-
-const checkAdminScopes = requiredScopes("write:project");
-const checkContentManagerScopes = requiredScopes("write:project");
 
 // importing Routers
 const TaskRouter = require('./routers/taskRouter');
@@ -37,9 +34,9 @@ const projectController = new ProjectController(project, task);
 const userController = new UserController(user, task);
 
 // initializing Routers
-const taskRouter = new TaskRouter(express, taskController, checkJwt, checkAdminScopes, checkContentManagerScopes).routes();
-const projectRouter = new ProjectRouter(express, projectController, checkJwt, checkAdminScopes, checkContentManagerScopes).routes();
-const userRouter = new UserRouter(express, userController, checkJwt, checkAdminScopes, checkContentManagerScopes).routes();
+const taskRouter = new TaskRouter(express, taskController, checkJwt).routes();
+const projectRouter = new ProjectRouter(express, projectController, checkJwt).routes();
+const userRouter = new UserRouter(express, userController, checkJwt).routes();
 
 
 // Enable CORS access to this server

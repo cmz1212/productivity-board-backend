@@ -9,12 +9,16 @@ class ProjectController {
   // Retrieve all projects
   async getAll(req, res) {
     try {
+      const userEmail = req.headers["useremail"];
       const output = await this.model.findAll({
         include: [
           {
             model: this.taskModel,
           },
         ],
+        where: {
+          auth_id: userEmail,
+        },
       });
       return res.json(output);
     } catch (err) {
@@ -24,6 +28,7 @@ class ProjectController {
 
   // Retrieve specific project
   async getOneProject(req, res) {
+    const userEmail = req.headers["useremail"];
     const { projectId } = req.params;
     try {
       const OneProject = await this.model.findByPk(projectId, {
@@ -32,6 +37,9 @@ class ProjectController {
             model: this.taskModel,
           },
         ],
+        where: {
+          auth_id: userEmail,
+        },
       });
       return res.json(OneProject);
     } catch (err) {
