@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     image_link: DataTypes.STRING,
-    additonal_info: DataTypes.STRING,
+    additional_info: DataTypes.STRING,
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,
