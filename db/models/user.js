@@ -27,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
-    }
+    },
+    proj_id: DataTypes.BIGINT
   }, {
     sequelize,
     modelName: 'user',

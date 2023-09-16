@@ -8,6 +8,7 @@ class UserController {
 
   // Retrieve all users
   async getAll(req, res) {
+    const projId = req.headers["proj_id"];
     try {
       const output = await this.model.findAll(
         { include: [
@@ -18,6 +19,9 @@ class UserController {
               }
             }
           ],
+          where: {
+            proj_id: projId,
+          },
         }
       );
       return res.json(output);
@@ -29,6 +33,7 @@ class UserController {
   // Retrieve specific user
   async getOneUser(req, res) {
     const { userId } = req.params;
+    const projId = req.headers["proj_id"];
     try {
       const OneUser = await this.model.findByPk(userId, {
         include: [
@@ -38,7 +43,10 @@ class UserController {
               exclude: ['createdAt', 'updatedAt'] // Exclude the createdAt column from the associated task
             }
           }
-        ]
+        ],
+        where: {
+          proj_id: projId,
+        },
       });
       return res.json(OneUser);
     } catch (err) {
@@ -50,7 +58,7 @@ class UserController {
   async postOneUser(req, res) {
     try {
       // Get the input data from the request body
-      const { user_name, user_role, image_link, additional_info } = req.body;
+      const { user_name, user_role, image_link, additional_info, proj_id } = req.body;
 
       const newUser = await this.model.create({
         user_name,
@@ -59,6 +67,7 @@ class UserController {
         additional_info,
         created_at: Sequelize.literal('CURRENT_TIMESTAMP'),
         updated_at: Sequelize.literal('CURRENT_TIMESTAMP'),
+        proj_id,
       });
 
       // Respond with new user
