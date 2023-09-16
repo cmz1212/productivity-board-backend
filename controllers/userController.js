@@ -1,9 +1,10 @@
 const Sequelize = require('sequelize');
 
 class UserController {
-  constructor(model, taskModel) {
+  constructor(model, taskModel, taskUserModel) {
     this.model = model;
     this.taskModel = taskModel;
+    this.taskUserModel = taskUserModel;
   }
 
   // Retrieve all users
@@ -140,6 +141,92 @@ class UserController {
     }
   }
 
+  // Link user to task
+  async linkUserToTask(req, res) {
+    try {
+      const { userId } = req.params;
+      const { task_id } = req.body;
+
+      // Validate if both the user and task exist
+      const existingUser = await this.model.findByPk(userId);
+      const existingTask = await this.taskModel.findByPk(task_id);
+
+      if (!existingUser) {
+        return res.status(404).json({ error: true, msg: 'User not found.' });
+      }
+
+      if (!existingTask) {
+        return res.status(404).json({ error: true, msg: 'Task not found.' });
+      }
+
+      // Check if the linkage already exists
+      const existingLink = await this.taskUserModel.findOne({
+        where: {
+          user_id: userId,
+          task_id: task_id,
+        },
+      });
+
+      if (existingLink) {
+        return res.status(409).json({ error: true, msg: 'User is already linked to this task.' });
+      }
+      else {
+
+        // Link the user to the task
+        await this.taskUserModel.create({
+          user_id: userId,
+          task_id: task_id,
+        });
+  
+        return res.json({ success: true, msg: 'User successfully linked to task.' });
+
+      }
+
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  async unlinkUserFromTask(req, res) {
+    try {
+        const { userId } = req.params;
+        const { task_id } = req.body;
+
+        // Validate if both the user and task exist
+        const existingUser = await this.model.findByPk(userId);
+        const existingTask = await this.taskModel.findByPk(task_id);
+
+        if (!existingUser) {
+            return res.status(404).json({ error: true, msg: 'User not found.' });
+        }
+
+        if (!existingTask) {
+            return res.status(404).json({ error: true, msg: 'Task not found.' });
+        }
+
+        // Check if the linkage exists
+        const existingLink = await this.taskUserModel.findOne({
+            where: {
+                user_id: userId,
+                task_id: task_id,
+            },
+        });
+
+        if (!existingLink) {
+            return res.status(404).json({ error: true, msg: 'Linkage between user and task not found.' });
+        } else {
+
+        // Unlink the user from the task
+        await existingLink.destroy();
+        return res.json({ success: true, msg: 'User successfully unlinked from task.' });
+
+        }
+
+    } catch (err) {
+        return res.status(400).json({ error: true, msg: err });
+    }
+  }
+  
 }
 
 module.exports = UserController;

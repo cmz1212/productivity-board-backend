@@ -11,6 +11,8 @@ class userRouter {
     router.post("/", this.controller.postOneUser.bind(this.controller));
     router.put("/:userId", this.controller.putOneUser.bind(this.controller));
     router.delete("/:userId", this.controller.deleteOneUser.bind(this.controller));
+    router.post("/linkUserToTask/:userId", this.controller.linkUserToTask.bind(this.controller));
+    router.delete("/unlinkUserFromTask/:userId", this.controller.unlinkUserFromTask.bind(this.controller));
     return router;
   }
 }

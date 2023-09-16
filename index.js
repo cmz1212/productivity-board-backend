@@ -26,18 +26,17 @@ const UserController = require('./controllers/userController');
 
 // importing DB
 const db = require('./db/models/index');
-const {task, project, user} = db;
+const {task, project, user, task_user} = db;
 
 // initializing Controllers -> note the lowercase for the first word
 const taskController = new TaskController(task, project, user);
 const projectController = new ProjectController(project, task);
-const userController = new UserController(user, task);
+const userController = new UserController(user, task, task_user);
 
 // initializing Routers
 const taskRouter = new TaskRouter(express, taskController, checkJwt).routes();
 const projectRouter = new ProjectRouter(express, projectController, checkJwt).routes();
 const userRouter = new UserRouter(express, userController, checkJwt).routes();
-
 
 // Enable CORS access to this server
 app.use(cors());
