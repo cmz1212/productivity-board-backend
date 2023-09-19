@@ -4,7 +4,7 @@ const { auth } = require('express-oauth2-jwt-bearer');
 
 require('dotenv').config();
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 2999;
 const app = express();
 
 const checkJwt = auth({
