@@ -3,11 +3,6 @@ const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class project extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       this.hasMany(models.task, {foreignKey: 'project_id'} );
     }
@@ -39,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'project',
     tableName: 'project',
     underscored: false,
-    timestamps: false,
+    timestamps: false, // Exclude createdAt and updatedAt columns
     freezeTableName: true // Prevent Sequelize from pluralizing table name
   });
   return project;

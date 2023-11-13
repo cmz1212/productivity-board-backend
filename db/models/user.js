@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'user',
     tableName: 'user',
     underscored: false,
-    timestamps: false,
+    timestamps: false, // Exclude createdAt and updatedAt columns
     freezeTableName: true // Prevent Sequelize from pluralizing table name
   });
   return user;

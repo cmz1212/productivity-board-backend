@@ -4,13 +4,11 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class task_user extends Model {
     static associate(models) {
-      // Define associations here
     }
   }
 
   task_user.init(
     {
-      // Define columns of the task_user table here
       user_id: DataTypes.INTEGER,
       task_id: DataTypes.INTEGER,
       created_at: {

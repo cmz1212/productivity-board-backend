@@ -18,7 +18,7 @@ class TaskController {
           {
             model: this.userModel,
             attributes: {
-              exclude: ['createdAt', 'updatedAt'] // Exclude createdAt and updatedAt from the associated user
+              exclude: ['createdAt', 'updatedAt']
             }
           },
           
@@ -32,15 +32,16 @@ class TaskController {
   
   // Retrieve specific task
   async getOneTask(req, res) {
-    const { taskId } = req.params;
     try {
+      const { taskId } = req.params;
+      
       const OneTask = await this.model.findByPk(taskId, {
         include: [
           { model: this.taskModel },
           {
             model: this.userModel,
             attributes: {
-              exclude: ['createdAt', 'updatedAt'] // Exclude createdAt and updatedAt from the associated user
+              exclude: ['createdAt', 'updatedAt']
             }
           }
         ]
@@ -54,7 +55,6 @@ class TaskController {
   // Add a new task
   async postOneTask(req, res) {
     try {
-      // Get the input data from the request body
       const { task_description, project_id, status, start_date, end_date, target_end_date, cycle_time, target_cycle_time, priority, task_comments } = req.body;
 
       const newTask = await this.model.create({
@@ -83,8 +83,6 @@ class TaskController {
   async putOneTask(req, res) {
     try {
       const { taskId } = req.params;
-  
-      // Get the updated data from the request body
       const { task_description, project_id, status, start_date, end_date, target_end_date, cycle_time, target_cycle_time, priority, task_comments } = req.body;
   
       // Find the existing task by ID

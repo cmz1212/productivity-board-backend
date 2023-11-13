@@ -3,11 +3,6 @@ const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class task extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       this.belongsTo(models.project, { foreignKey: 'project_id'});
       this.belongsToMany(models.user, { through: "task_user", foreignKey: 'task_id', otherKey: 'user_id' });
@@ -48,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'task',
     tableName: 'task',
     underscored: false,
-    timestamps: false,
+    timestamps: false, // Exclude createdAt and updatedAt columns
     freezeTableName: true // Prevent Sequelize from pluralizing table name
   });
   return task;

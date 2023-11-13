@@ -9,19 +9,19 @@ class UserController {
 
   // Retrieve all users
   async getAll(req, res) {
-    const projId = req.headers["proj_id"];
+    const { proj_id } = req.headers;
     try {
       const output = await this.model.findAll(
         { include: [
             {
               model: this.taskModel,
               attributes: {
-                exclude: ['createdAt', 'updatedAt'] // Exclude createdAt and updatedAt from the associated task
+                exclude: ['createdAt', 'updatedAt']
               }
             }
           ],
           where: {
-            proj_id: projId,
+            proj_id: proj_id,
           },
         }
       );
@@ -34,19 +34,19 @@ class UserController {
   // Retrieve specific user
   async getOneUser(req, res) {
     const { userId } = req.params;
-    const projId = req.headers["proj_id"];
+    const { proj_id } = req.headers;
     try {
       const OneUser = await this.model.findByPk(userId, {
         include: [
           {
             model: this.taskModel,
             attributes: {
-              exclude: ['createdAt', 'updatedAt'] // Exclude the createdAt column from the associated task
+              exclude: ['createdAt', 'updatedAt']
             }
           }
         ],
         where: {
-          proj_id: projId,
+          proj_id: proj_id,
         },
       });
       return res.json(OneUser);
@@ -58,7 +58,6 @@ class UserController {
   // Add a new user
   async postOneUser(req, res) {
     try {
-      // Get the input data from the request body
       const { user_name, user_role, image_link, additional_info, proj_id } = req.body;
 
       const newUser = await this.model.create({
@@ -82,8 +81,6 @@ class UserController {
   async putOneUser(req, res) {
     try {
       const { userId } = req.params;
-  
-      // Get the updated data from the request body
       const { user_name, user_role, image_link, additional_info } = req.body;
   
       // Find the existing user by ID

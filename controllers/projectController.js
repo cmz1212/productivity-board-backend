@@ -9,7 +9,8 @@ class ProjectController {
   // Retrieve all projects
   async getAll(req, res) {
     try {
-      const userEmail = req.headers["useremail"];
+      const { useremail } = req.headers;
+
       const output = await this.model.findAll({
         include: [
           {
@@ -17,7 +18,7 @@ class ProjectController {
           },
         ],
         where: {
-          auth_id: userEmail,
+          auth_id: useremail,
         },
       });
       return res.json(output);
@@ -28,8 +29,9 @@ class ProjectController {
 
   // Retrieve specific project
   async getOneProject(req, res) {
-    const userEmail = req.headers["useremail"];
     const { projectId } = req.params;
+    const { useremail } = req.headers;
+
     try {
       const OneProject = await this.model.findByPk(projectId, {
         include: [
@@ -38,7 +40,7 @@ class ProjectController {
           },
         ],
         where: {
-          auth_id: userEmail,
+          auth_id: useremail,
         },
       });
       return res.json(OneProject);
@@ -50,14 +52,7 @@ class ProjectController {
   // Add a new project
   async postOneProject(req, res) {
     try {
-      // Get the input data from the request body
-      const {
-        project_description,
-        wip_limit,
-        cycle_time_limit,
-        project_comments,
-        auth_id,
-      } = req.body;
+      const { project_description, wip_limit, cycle_time_limit, project_comments, auth_id } = req.body;
 
       const newProject = await this.model.create({
         project_description,
@@ -80,14 +75,7 @@ class ProjectController {
   async putOneProject(req, res) {
     try {
       const { projectId } = req.params;
-
-      // Get the updated data from the request body
-      const {
-        project_description,
-        wip_limit,
-        cycle_time_limit,
-        project_comments,
-      } = req.body;
+      const { project_description, wip_limit, cycle_time_limit, project_comments } = req.body;
 
       // Find the existing project by ID
       const existingProject = await this.model.findByPk(projectId);
