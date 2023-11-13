@@ -9,8 +9,9 @@ class UserController {
 
   // Retrieve all users
   async getAll(req, res) {
-    const { proj_id } = req.headers;
     try {
+      const { proj_id } = req.headers;
+      
       const output = await this.model.findAll(
         { include: [
             {
@@ -33,9 +34,10 @@ class UserController {
   
   // Retrieve specific user
   async getOneUser(req, res) {
-    const { userId } = req.params;
-    const { proj_id } = req.headers;
     try {
+      const { userId } = req.params;
+      const { proj_id } = req.headers;
+
       const OneUser = await this.model.findByPk(userId, {
         include: [
           {

@@ -29,10 +29,10 @@ class ProjectController {
 
   // Retrieve specific project
   async getOneProject(req, res) {
-    const { projectId } = req.params;
-    const { useremail } = req.headers;
-
     try {
+      const { projectId } = req.params;
+      const { useremail } = req.headers;
+      
       const OneProject = await this.model.findByPk(projectId, {
         include: [
           {
