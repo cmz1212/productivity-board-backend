@@ -21,9 +21,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    start_date: DataTypes.DATE,
-    end_date: DataTypes.DATE,
-    target_end_date: DataTypes.DATE,
+    start_date: DataTypes.DATE({ timezone: true }),
+    end_date: DataTypes.DATE({ timezone: true }),
+    target_end_date: DataTypes.DATE({ timezone: true }),
     cycle_time: DataTypes.BIGINT,
     target_cycle_time: DataTypes.BIGINT,
     priority: DataTypes.STRING,
